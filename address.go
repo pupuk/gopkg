@@ -20,4 +20,5 @@ func Smart(address string) string {
 // Test then echo a string
 func Test(str string) string {
 	fmt.Println("This is test string")
+	return "call success"
 }
