@@ -42,19 +42,25 @@ func Decompose(str string) map[string]string {
 	reg = regexp.MustCompile(`(?i)\d{18}|\d{17}X`)
 	idnMatch := reg.FindString(str)
 	str = strings.Replace(str, idnMatch, "", -1)
-	m["idn"] = strings.ToUpper(idnMatch)
+	if strings.ToUpper(idnMatch) != "" {
+		m["idn"] = strings.ToUpper(idnMatch)
+	}
 
 	//5. 提取11位手机号码或者7位以上座机号
 	reg = regexp.MustCompile(`\d{7,11}|\d{3,4}-\d{6,8}`)
 	mobile := reg.FindString(str)
 	str = strings.Replace(str, mobile, "", -1)
-	m["mobile"] = mobile
+	if mobile != "" {
+		m["mobile"] = mobile
+	}
 
 	//6. 提取6位邮编 邮编也可用后面解析出的省市区地址从数据库匹配出
 	reg = regexp.MustCompile(`\d{6}`)
 	postcode := reg.FindString(str)
 	str = strings.Replace(str, postcode, "", -1)
-	m["postcode"] = postcode
+	if postcode != "" {
+		m["postcode"] = postcode
+	}
 
 	//再次把2个及其以上的空格合并成一个，并首位TRIM
 	reg = regexp.MustCompile(` {2,}`)
@@ -71,10 +77,14 @@ func Decompose(str string) map[string]string {
 			}
 		}
 	}
-	m["name"] = name
+	if name != "" {
+		m["name"] = name
+	}
 
 	addr := strings.TrimSpace(strings.Replace(str, name, "", -1))
-	m["addr"] = addr
+	if addr != "" {
+		m["addr"] = addr
+	}
 
 	return m
 }
